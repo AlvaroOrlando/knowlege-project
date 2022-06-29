@@ -3,7 +3,10 @@ module.exports = app => {
     .post(app.api.user.save)
     .get(app.api.user.get)
 
-    app.route('/users/:id')
+    app.route('/users')
     .put(app.api.user.save)
+
+    app.route('/users/:id')
+    .get(app.api.user.getById)
 }
 

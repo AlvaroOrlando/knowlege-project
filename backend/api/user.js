@@ -1,4 +1,5 @@
 const bcrypt = require('bcrypt-nodejs');
+const { parse } = require('pg-protocol');
 
 
 module.exports = app => {
@@ -65,5 +66,24 @@ module.exports = app => {
         .catch(err => res.status(500).send(err))
     }
 
-    return { save , get }
+    //método getById
+    const getById =  async (req, res) => {
+        
+       const { id } = req.params;
+
+        const user = await app.db('users')
+        .select('id', 'name', 'email', 'admin')
+        .where({id})
+        .first()
+
+        //check if user exists
+        if(!user){
+            res.status(422).json({message: "Usuário não encontrado!"})
+            return
+        } else {
+             return res.status(200).json({user})
+        }
+    }
+
+    return { save , get, getById }
 }
